@@ -1,3 +1,8 @@
 temp/
 venv/
 .DS_Store
+pipeline/airflow/dags/__pycache__/
+data/processed/initial_data.csv
+data/drift_baselines/
+data/raw/insurance.csv
+data/processed/initial_data.csv
