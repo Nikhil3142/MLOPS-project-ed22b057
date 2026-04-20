@@ -1,8 +1,8 @@
 {
-  "rmse": 5903.6633047152045,
-  "mae": 3692.741227004678,
-  "r2": 0.6875910422495256,
-  "inference_latency_ms": 0.2140095370123163,
-  "model": "ridge",
-  "run_id": "9ff02c0d0efd4432b4ed7fef07e66cac"
+  "rmse": 5463.103359528441,
+  "mae": 2901.0272819861643,
+  "r2": 0.7324782169008115,
+  "inference_latency_ms": 0.5002983118174598,
+  "model": "xgboost",
+  "run_id": "f596ebfdaef44151b9498430e0bec0c2"
 }
