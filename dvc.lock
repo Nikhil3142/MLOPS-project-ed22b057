@@ -47,10 +47,13 @@ stages:
       params.yaml:
         active_model: xgboost
         hyperparameters.xgboost:
-          n_estimators: 100
-          learning_rate: 0.1
-          max_depth: 5
+          n_estimators: 300
+          learning_rate: 0.05
+          max_depth: 6
           random_state: 42
+          subsample: 0.8
+          colsample_bytree: 0.8
+          min_child_weight: 3
         mlflow:
           experiment_name: insurance_cost_prediction
           model_name: insurance_cost_model
@@ -58,8 +61,8 @@ stages:
     outs:
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: aac8b9691589d4db0b4194dfba881182
-      size: 201
+      md5: abe25c105fff2aaa760001185887966c
+      size: 280
   evaluate:
     cmd: PYTHONPATH=. python pipeline/evaluate.py
     deps:
@@ -69,8 +72,8 @@ stages:
       size: 35756
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: aac8b9691589d4db0b4194dfba881182
-      size: 201
+      md5: abe25c105fff2aaa760001185887966c
+      size: 280
     - path: pipeline/evaluate.py
       hash: md5
       md5: 26d25836654f016e0209da390680bb7d
@@ -88,18 +91,18 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 36daa692d1d482ccfae575a3f9a0c86a
+      md5: 47384719b64fa8f57334e0ca40e9708f
       size: 204
     - path: models/artifacts/shap_values.pkl
       hash: md5
-      md5: 163f03301c6195676a7f4294574a1aae
+      md5: 0906a5832fe7cae994410928c970a820
       size: 44412
   register:
     cmd: PYTHONPATH=. python pipeline/register.py
     deps:
     - path: metrics.json
       hash: md5
-      md5: 36daa692d1d482ccfae575a3f9a0c86a
+      md5: 47384719b64fa8f57334e0ca40e9708f
       size: 204
     - path: pipeline/register.py
       hash: md5
