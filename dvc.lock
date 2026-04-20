@@ -35,25 +35,21 @@ stages:
       hash: md5
       md5: 12c395c31cf2dcf58f7a2d898cfaa1b6
       size: 142585
-    - path: pipeline/models/xgboost.py
+    - path: pipeline/models/random_forest.py
       hash: md5
-      md5: 8331d62d6f1b451321cbfbab815a2ec7
-      size: 183
+      md5: 1874823063e406e04f7822453249dd5c
+      size: 224
     - path: pipeline/train.py
       hash: md5
       md5: 7390001a3eb4e9d1254bedeb9d607bed
       size: 4862
     params:
       params.yaml:
-        active_model: xgboost
-        hyperparameters.xgboost:
-          n_estimators: 300
-          learning_rate: 0.05
-          max_depth: 6
+        active_model: random_forest
+        hyperparameters.random_forest:
+          n_estimators: 100
+          max_depth: 5
           random_state: 42
-          subsample: 0.8
-          colsample_bytree: 0.8
-          min_child_weight: 3
         mlflow:
           experiment_name: insurance_cost_prediction
           model_name: insurance_cost_model
@@ -61,8 +57,8 @@ stages:
     outs:
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: abe25c105fff2aaa760001185887966c
-      size: 280
+      md5: 6d48d1e0b4627084863a637eab8e7ad1
+      size: 181
   evaluate:
     cmd: PYTHONPATH=. python pipeline/evaluate.py
     deps:
@@ -72,8 +68,8 @@ stages:
       size: 35756
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: abe25c105fff2aaa760001185887966c
-      size: 280
+      md5: 6d48d1e0b4627084863a637eab8e7ad1
+      size: 181
     - path: pipeline/evaluate.py
       hash: md5
       md5: 26d25836654f016e0209da390680bb7d
@@ -91,19 +87,19 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 47384719b64fa8f57334e0ca40e9708f
-      size: 204
+      md5: c6ebaf336c24cfb915f3f09147c57d4f
+      size: 210
     - path: models/artifacts/shap_values.pkl
       hash: md5
-      md5: 0906a5832fe7cae994410928c970a820
-      size: 44412
+      md5: ee4de515e6a0500a786e5f476237d115
+      size: 59804
   register:
     cmd: PYTHONPATH=. python pipeline/register.py
     deps:
     - path: metrics.json
       hash: md5
-      md5: 47384719b64fa8f57334e0ca40e9708f
-      size: 204
+      md5: c6ebaf336c24cfb915f3f09147c57d4f
+      size: 210
     - path: pipeline/register.py
       hash: md5
       md5: 00ecaeb9e1ad332213106d8a66561ce5
