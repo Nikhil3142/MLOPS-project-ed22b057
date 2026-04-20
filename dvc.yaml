@@ -23,7 +23,7 @@ stages:
     params:
       - params.yaml:
           - active_model
-          - hyperparameters
+          - hyperparameters.${active_model}
           - mlflow
     outs:
       - models/artifacts/model_info.json
