@@ -35,9 +35,9 @@ stages:
       hash: md5
       md5: 12c395c31cf2dcf58f7a2d898cfaa1b6
       size: 142585
-    - path: pipeline/models/lasso.py
+    - path: pipeline/models/ridge.py
       hash: md5
-      md5: 6bb5a1e8216822484d21906fdc1c1b64
+      md5: 927f88ed5f9ca30e34a3004b267e40ef
       size: 183
     - path: pipeline/train.py
       hash: md5
@@ -45,8 +45,8 @@ stages:
       size: 4862
     params:
       params.yaml:
-        active_model: lasso
-        hyperparameters.lasso:
+        active_model: ridge
+        hyperparameters.ridge:
           alpha: 1.0
         mlflow:
           experiment_name: insurance_cost_prediction
@@ -55,7 +55,7 @@ stages:
     outs:
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: 389097c087f794ec8ede4a8aeca43269
+      md5: a2fd19540f76f19e51728614fc7ee260
       size: 122
   evaluate:
     cmd: PYTHONPATH=. python pipeline/evaluate.py
@@ -66,7 +66,7 @@ stages:
       size: 35756
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: 389097c087f794ec8ede4a8aeca43269
+      md5: a2fd19540f76f19e51728614fc7ee260
       size: 122
     - path: pipeline/evaluate.py
       hash: md5
@@ -85,19 +85,19 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 03a17e0e75a98747ec38c46c60a29db2
-      size: 204
+      md5: 38a2d4596aeffcb795f0c0887cf6d4cc
+      size: 202
     - path: models/artifacts/shap_values.pkl
       hash: md5
-      md5: d60aec410353e47fc4d5d87a48d5122b
+      md5: aaeaa9bbc0c2cae333e4163195063649
       size: 59804
   register:
     cmd: PYTHONPATH=. python pipeline/register.py
     deps:
     - path: metrics.json
       hash: md5
-      md5: 03a17e0e75a98747ec38c46c60a29db2
-      size: 204
+      md5: 38a2d4596aeffcb795f0c0887cf6d4cc
+      size: 202
     - path: pipeline/register.py
       hash: md5
       md5: 00ecaeb9e1ad332213106d8a66561ce5
