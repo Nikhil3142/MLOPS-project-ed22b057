@@ -1,0 +1,54 @@
+stages:
+
+  preprocess:
+    cmd: python pipeline/preprocess.py
+    deps:
+      - pipeline/preprocess.py
+      - data/processed/initial_data.csv
+    params:
+      - params.yaml:
+          - data.test_size
+          - data.random_state
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - models/artifacts/scaler.pkl
+
+  train:
+    cmd: PYTHONPATH=. python pipeline/train.py
+    deps:
+      - pipeline/train.py
+      - pipeline/models/${active_model}.py
+      - data/processed/train.csv
+    params:
+      - params.yaml:
+          - active_model
+          - hyperparameters
+          - mlflow
+    outs:
+      - models/artifacts/model_info.json
+
+  evaluate:
+    cmd: PYTHONPATH=. python pipeline/evaluate.py
+    deps:
+      - pipeline/evaluate.py
+      - data/processed/test.csv
+      - models/artifacts/model_info.json
+    params:
+      - params.yaml:
+          - mlflow
+          - thresholds
+    outs:
+      - models/artifacts/shap_values.pkl
+    metrics:
+      - metrics.json:
+          cache: false
+
+  register:
+    cmd: PYTHONPATH=. python pipeline/register.py
+    deps:
+      - pipeline/register.py
+      - metrics.json
+    params:
+      - params.yaml:
+          - mlflow

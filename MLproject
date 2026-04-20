@@ -1,0 +1,21 @@
+name: insurance-mlops
+
+python_env: python_env.yaml
+
+entry_points:
+  preprocess:
+    command: "python pipeline/preprocess.py"
+
+  train:
+    parameters:
+      active_model: {type: string, default: "random_forest"}
+    command: "python pipeline/train.py"
+
+  evaluate:
+    command: "python pipeline/evaluate.py"
+
+  register:
+    command: "python pipeline/register.py"
+
+  main:
+    command: "dvc repro"

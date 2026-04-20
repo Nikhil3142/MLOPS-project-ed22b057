@@ -1,0 +1,8 @@
+{
+  "rmse": 5903.869878601576,
+  "mae": 3689.9431290741586,
+  "r2": 0.6875691789899583,
+  "inference_latency_ms": 0.2145841484889388,
+  "model": "linear_regression",
+  "run_id": "dfcad2bd6f7a458f98052e6afbf08b7c"
+}

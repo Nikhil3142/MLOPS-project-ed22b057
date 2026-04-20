@@ -1,0 +1,123 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python pipeline/preprocess.py
+    deps:
+    - path: data/processed/initial_data.csv
+      hash: md5
+      md5: 771399c35e57f1e666909693dcc09f90
+      size: 46252
+    - path: pipeline/preprocess.py
+      hash: md5
+      md5: fad2d0823f623d89d0f8f0c97027569e
+      size: 4907
+    params:
+      params.yaml:
+        data.random_state: 42
+        data.test_size: 0.2
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 4fa61ae898614197b035ee22e13783c2
+      size: 35756
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 12c395c31cf2dcf58f7a2d898cfaa1b6
+      size: 142585
+    - path: models/artifacts/scaler.pkl
+      hash: md5
+      md5: 1dcb73f0180c33c60ff5d1ed0baa9d33
+      size: 1223
+  train:
+    cmd: PYTHONPATH=. python pipeline/train.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 12c395c31cf2dcf58f7a2d898cfaa1b6
+      size: 142585
+    - path: pipeline/models/linear_regression.py
+      hash: md5
+      md5: 1e535c4bb2630334504a55b7c8d4f5d6
+      size: 206
+    - path: pipeline/train.py
+      hash: md5
+      md5: 7390001a3eb4e9d1254bedeb9d607bed
+      size: 4862
+    params:
+      params.yaml:
+        active_model: linear_regression
+        hyperparameters:
+          linear_regression: {}
+          ridge:
+            alpha: 1.0
+          lasso:
+            alpha: 1.0
+          random_forest:
+            n_estimators: 100
+            max_depth: 5
+            random_state: 42
+          xgboost:
+            n_estimators: 100
+            learning_rate: 0.1
+            max_depth: 5
+            random_state: 42
+        mlflow:
+          experiment_name: insurance_cost_prediction
+          model_name: insurance_cost_model
+          tracking_uri: http://localhost:5000
+    outs:
+    - path: models/artifacts/model_info.json
+      hash: md5
+      md5: e41b0d451f7a22e932f8a56093bc02fc
+      size: 114
+  evaluate:
+    cmd: PYTHONPATH=. python pipeline/evaluate.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 4fa61ae898614197b035ee22e13783c2
+      size: 35756
+    - path: models/artifacts/model_info.json
+      hash: md5
+      md5: e41b0d451f7a22e932f8a56093bc02fc
+      size: 114
+    - path: pipeline/evaluate.py
+      hash: md5
+      md5: 26d25836654f016e0209da390680bb7d
+      size: 6095
+    params:
+      params.yaml:
+        mlflow:
+          experiment_name: insurance_cost_prediction
+          model_name: insurance_cost_model
+          tracking_uri: http://localhost:5000
+        thresholds:
+          rmse_degradation_pct: 10
+          drift_psi_threshold: 0.2
+          max_inference_latency_ms: 200
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 1e396ce66081d06ad778c6588371b117
+      size: 214
+    - path: models/artifacts/shap_values.pkl
+      hash: md5
+      md5: b6f9b16a064b98b2f77adb8bbbf9273a
+      size: 59804
+  register:
+    cmd: PYTHONPATH=. python pipeline/register.py
+    deps:
+    - path: metrics.json
+      hash: md5
+      md5: 1e396ce66081d06ad778c6588371b117
+      size: 214
+    - path: pipeline/register.py
+      hash: md5
+      md5: 00ecaeb9e1ad332213106d8a66561ce5
+      size: 2992
+    params:
+      params.yaml:
+        mlflow:
+          experiment_name: insurance_cost_prediction
+          model_name: insurance_cost_model
+          tracking_uri: http://localhost:5000

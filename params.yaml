@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────
+# Active model — change this line to switch
+# Options: linear_regression | ridge | lasso | random_forest | xgboost
+# ─────────────────────────────────────────────
+active_model: linear_regression
+
+# ─────────────────────────────────────────────
+# Hyperparameters per model
+# ─────────────────────────────────────────────
+hyperparameters:
+  linear_regression: {}
+
+
+# ─────────────────────────────────────────────
+# Data split settings
+# ─────────────────────────────────────────────
+data:
+  test_size: 0.2
+  random_state: 42
+
+# ─────────────────────────────────────────────
+# Retraining thresholds
+# ─────────────────────────────────────────────
+thresholds:
+  rmse_degradation_pct: 10       # retrain if RMSE degrades > 10%
+  drift_psi_threshold: 0.2       # PSI > 0.2 = significant drift
+  max_inference_latency_ms: 200  # business metric
+
+# ─────────────────────────────────────────────
+# MLflow settings
+# ─────────────────────────────────────────────
+mlflow:
+  experiment_name: insurance_cost_prediction
+  model_name: insurance_cost_model
+  tracking_uri: http://localhost:5000
+  
