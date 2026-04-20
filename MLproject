@@ -4,18 +4,16 @@ python_env: python_env.yaml
 
 entry_points:
   preprocess:
-    command: "python pipeline/preprocess.py"
+    command: "MLFLOW_RUN_ID= python pipeline/preprocess.py"
 
   train:
-    parameters:
-      active_model: {type: string, default: "random_forest"}
-    command: "python pipeline/train.py"
+    command: "MLFLOW_RUN_ID= PYTHONPATH=. python pipeline/train.py"
 
   evaluate:
-    command: "python pipeline/evaluate.py"
+    command: "MLFLOW_RUN_ID= PYTHONPATH=. python pipeline/evaluate.py"
 
   register:
-    command: "python pipeline/register.py"
+    command: "MLFLOW_RUN_ID= PYTHONPATH=. python pipeline/register.py"
 
   main:
-    command: "dvc repro"
+    command: "MLFLOW_RUN_ID= dvc repro"
