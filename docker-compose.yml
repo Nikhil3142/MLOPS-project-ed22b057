@@ -29,15 +29,16 @@ services:
   # 1. MLflow Tracking Server + Model Registry
   # ───────────────────────────────────────────
   mlflow-server:
-    image: python:3.10-slim
+    build:
+      context: .
+      dockerfile: mlflow.Dockerfile
     container_name: mlflow-server
     working_dir: /mlflow
-    command: bash -c "pip install mlflow==2.13.0 --quiet && mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root mlflow-artifacts://"
     ports:
       - "5000:5000"
     volumes:
       - mlflow_data:/mlflow
-      - ./mlartifacts:/mlflow/artifacts
+      - ./mlartifacts:/Users/nikhil.narayan/Documents/GOOGLE DRIVE/Sem8/MLOPS/Mlops-Project/MLOPS-project-ed22b057/mlartifacts
     networks:
       - mlops-net
     healthcheck:
@@ -169,25 +170,27 @@ services:
   # ───────────────────────────────────────────
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: backend
     environment:
       MLFLOW_TRACKING_URI: http://mlflow-server:5000
       MODEL_NAME: insurance_cost_model
       MODEL_STAGE: Production
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - ./data:/app/data
       - ./models:/app/models
+      - ./mlartifacts:/Users/nikhil.narayan/Documents/GOOGLE DRIVE/Sem8/MLOPS/Mlops-Project/MLOPS-project-ed22b057/mlartifacts
     networks:
       - mlops-net
     depends_on:
       mlflow-server:
-        condition: service_healthy
+        condition: service_started
+    
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
       interval: 30s
       timeout: 10s
       retries: 5
