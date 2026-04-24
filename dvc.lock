@@ -57,7 +57,7 @@ stages:
     outs:
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: 6d48d1e0b4627084863a637eab8e7ad1
+      md5: 9c01b8226ed2b0e112e046c026581bd0
       size: 181
   evaluate:
     cmd: PYTHONPATH=. python pipeline/evaluate.py
@@ -68,7 +68,7 @@ stages:
       size: 35756
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: 6d48d1e0b4627084863a637eab8e7ad1
+      md5: 9c01b8226ed2b0e112e046c026581bd0
       size: 181
     - path: pipeline/evaluate.py
       hash: md5
@@ -87,18 +87,18 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: c6ebaf336c24cfb915f3f09147c57d4f
+      md5: e7836a93d42ee1a0c96d3cd4db56836e
       size: 210
     - path: models/artifacts/shap_values.pkl
       hash: md5
-      md5: ee4de515e6a0500a786e5f476237d115
+      md5: 3d78e73e27ce533804994ebfcdd25b19
       size: 59804
   register:
     cmd: PYTHONPATH=. python pipeline/register.py
     deps:
     - path: metrics.json
       hash: md5
-      md5: c6ebaf336c24cfb915f3f09147c57d4f
+      md5: e7836a93d42ee1a0c96d3cd4db56836e
       size: 210
     - path: pipeline/register.py
       hash: md5
