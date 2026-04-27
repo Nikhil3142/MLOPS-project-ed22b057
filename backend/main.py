@@ -92,3 +92,14 @@ def model_info():
         model_stage="Production",
         rmse=rmse,
     )
+
+@app.post("/reload", tags=["Model"])
+def reload_model():
+    """Reload the Production model from MLflow Registry without restarting."""
+    logger.info("Manual model reload requested")
+    load_model()
+    model_name, model_version = get_model_info()
+    if is_model_loaded():
+        return {"status": "reloaded", "model_name": model_name, "model_version": model_version}
+    else:
+        raise HTTPException(status_code=503, detail="Model reload failed")
