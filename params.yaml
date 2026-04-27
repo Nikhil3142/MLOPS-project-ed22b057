@@ -2,7 +2,7 @@
 # Active model — change this line to switch
 # Options: linear_regression | ridge | lasso | random_forest | xgboost
 # ─────────────────────────────────────────────
-active_model: random_forest 
+active_model: lasso
 
 # ─────────────────────────────────────────────
 # Hyperparameters per model
