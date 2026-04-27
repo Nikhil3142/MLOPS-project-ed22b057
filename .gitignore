@@ -12,3 +12,5 @@ pipeline/models/__pycache__/
 models/artifacts/
 mlartifacts/
 data/processed/
+data/retrain_triggered.txt
+data/retrain_triggered.txt
