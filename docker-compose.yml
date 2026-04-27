@@ -88,7 +88,10 @@ services:
   # 4. Airflow Init — runs once to set up DB and admin user
   # ───────────────────────────────────────────
   airflow-init:
-    image: apache/airflow:2.9.1-python3.10
+    build:
+      context: .
+      dockerfile: pipeline/airflow/Dockerfile
+
     container_name: airflow-init
     entrypoint: /bin/bash
     command:
@@ -116,7 +119,9 @@ services:
   # 5. Airflow Webserver
   # ───────────────────────────────────────────
   airflow-webserver:
-    image: apache/airflow:2.9.1-python3.10
+    build:
+      context: .
+      dockerfile: pipeline/airflow/Dockerfile
     container_name: airflow-webserver
     command: webserver
     ports:
@@ -138,7 +143,9 @@ services:
   # 6. Airflow Scheduler
   # ───────────────────────────────────────────
   airflow-scheduler:
-    image: apache/airflow:2.9.1-python3.10
+    build:
+      context: .
+      dockerfile: pipeline/airflow/Dockerfile
     container_name: airflow-scheduler
     command: scheduler
     environment:
@@ -153,7 +160,9 @@ services:
   # 7. Airflow Worker
   # ───────────────────────────────────────────
   airflow-worker:
-    image: apache/airflow:2.9.1-python3.10
+    build:
+      context: .
+      dockerfile: pipeline/airflow/Dockerfile
     container_name: airflow-worker
     command: celery worker
     environment:
@@ -247,11 +256,13 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
     ports:
       - "3001:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana_dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json:ro
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards:ro
     networks:
       - mlops-net
     depends_on:
