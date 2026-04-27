@@ -1,0 +1,198 @@
+:root {
+    --navy: #0a1628;
+    --navy-light: #132040;
+    --navy-mid: #1e3a5f;
+    --teal: #00c2a8;
+    --teal-light: #00e5c8;
+    --teal-dim: rgba(0, 194, 168, 0.15);
+    --white: #ffffff;
+    --off-white: #f0f4f8;
+    --gray-100: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --font-display: 'DM Serif Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+    --shadow-lg: 0 8px 48px rgba(0, 0, 0, 0.28);
+    --transition: all 0.2s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--navy);
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--navy);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--navy-mid);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--teal);
+}
+
+/* Animations */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.fade-up {
+    animation: fadeUp 0.5s ease forwards;
+}
+
+.fade-up-delay-1 {
+    animation-delay: 0.1s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+}
+
+.fade-up-delay-2 {
+    animation-delay: 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+}
+
+.fade-up-delay-3 {
+    animation-delay: 0.3s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+}
+
+/* Utility */
+.card {
+    background: var(--navy-light);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow);
+}
+
+.btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.3px;
+}
+
+.btn-primary {
+    background: var(--teal);
+    color: var(--navy);
+}
+
+.btn-primary:hover {
+    background: var(--teal-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0, 194, 168, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(10, 22, 40, 0.3);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+}
+
+.tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.tag-teal {
+    background: var(--teal-dim);
+    color: var(--teal);
+    border: 1px solid rgba(0, 194, 168, 0.3);
+}
