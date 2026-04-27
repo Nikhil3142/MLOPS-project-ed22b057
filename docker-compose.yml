@@ -38,7 +38,7 @@ services:
       - "5000:5000"
     volumes:
       - mlflow_data:/mlflow
-      - ./mlartifacts:/Users/nikhil.narayan/Documents/GOOGLE DRIVE/Sem8/MLOPS/Mlops-Project/MLOPS-project-ed22b057/mlartifacts
+      - ./mlartifacts:/mlflow/artifacts
     networks:
       - mlops-net
     healthcheck:
@@ -191,7 +191,7 @@ services:
     volumes:
       - ./data:/app/data
       - ./models:/app/models
-      - ./mlartifacts:/Users/nikhil.narayan/Documents/GOOGLE DRIVE/Sem8/MLOPS/Mlops-Project/MLOPS-project-ed22b057/mlartifacts
+      - ./mlartifacts:/mlflow/artifacts
     networks:
       - mlops-net
     depends_on:
