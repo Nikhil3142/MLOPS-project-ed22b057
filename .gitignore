@@ -6,3 +6,9 @@ data/processed/initial_data.csv
 data/drift_baselines/
 data/raw/insurance.csv
 data/processed/initial_data.csv
+data/processed/.gitignore
+pipeline/__pycache__/
+pipeline/models/__pycache__/
+models/artifacts/
+mlartifacts/
+data/processed/

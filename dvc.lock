@@ -35,21 +35,19 @@ stages:
       hash: md5
       md5: 12c395c31cf2dcf58f7a2d898cfaa1b6
       size: 142585
-    - path: pipeline/models/random_forest.py
+    - path: pipeline/models/lasso.py
       hash: md5
-      md5: 1874823063e406e04f7822453249dd5c
-      size: 224
+      md5: 6bb5a1e8216822484d21906fdc1c1b64
+      size: 183
     - path: pipeline/train.py
       hash: md5
       md5: 7390001a3eb4e9d1254bedeb9d607bed
       size: 4862
     params:
       params.yaml:
-        active_model: random_forest
-        hyperparameters.random_forest:
-          n_estimators: 100
-          max_depth: 5
-          random_state: 42
+        active_model: lasso
+        hyperparameters.lasso:
+          alpha: 1.0
         mlflow:
           experiment_name: insurance_cost_prediction
           model_name: insurance_cost_model
@@ -57,8 +55,8 @@ stages:
     outs:
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: 9c01b8226ed2b0e112e046c026581bd0
-      size: 181
+      md5: dccd30203aeb9cad62918c7f35e9bcb9
+      size: 122
   evaluate:
     cmd: PYTHONPATH=. python pipeline/evaluate.py
     deps:
@@ -68,8 +66,8 @@ stages:
       size: 35756
     - path: models/artifacts/model_info.json
       hash: md5
-      md5: 9c01b8226ed2b0e112e046c026581bd0
-      size: 181
+      md5: dccd30203aeb9cad62918c7f35e9bcb9
+      size: 122
     - path: pipeline/evaluate.py
       hash: md5
       md5: 26d25836654f016e0209da390680bb7d
@@ -87,19 +85,19 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: e7836a93d42ee1a0c96d3cd4db56836e
-      size: 210
+      md5: 9d029db9b74a32ab1d4fbb4732b6a199
+      size: 204
     - path: models/artifacts/shap_values.pkl
       hash: md5
-      md5: 3d78e73e27ce533804994ebfcdd25b19
+      md5: de4e894f222afa0a4e451b035b2d8765
       size: 59804
   register:
     cmd: PYTHONPATH=. python pipeline/register.py
     deps:
     - path: metrics.json
       hash: md5
-      md5: e7836a93d42ee1a0c96d3cd4db56836e
-      size: 210
+      md5: 9d029db9b74a32ab1d4fbb4732b6a199
+      size: 204
     - path: pipeline/register.py
       hash: md5
       md5: 00ecaeb9e1ad332213106d8a66561ce5
