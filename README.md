@@ -132,14 +132,11 @@ http://localhost:3000
 
 ## Running All 5 Models
 
-To train and compare all 5 models:
+train all 5 models with dvc repro -f and change active_model in params.yaml
 
-```bash
-for model in linear_regression ridge lasso random_forest xgboost; do
-  sed -i "s/active_model: .*/active_model: $model/" params.yaml
-  dvc repro -f
-done
-```
+
+Note: you can also run the training with conda venv with the command `mlflow run . -e train`
+
 
 Then compare in MLflow UI at `http://localhost:5000` and promote the best model.
 
@@ -208,19 +205,7 @@ pytest tests/ --html=reports/test_report.html --self-contained-html -v
 
 ---
 
-## Documentation
 
-All documentation is in the `docs/` folder:
-
-| Document | Description |
-|---|---|
-| architecture.md | System architecture diagram with block explanations |
-| HLD.md | High-level design choices and rationale |
-| LLD.md | API endpoint definitions and I/O specifications |
-| test_plan.md | Test cases, acceptance criteria, test report |
-| user_manual.md | Non-technical user guide |
-
----
 
 ## Known Limitations
 
