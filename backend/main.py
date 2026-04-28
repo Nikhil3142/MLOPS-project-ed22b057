@@ -7,7 +7,7 @@ FastAPI application entrypoint.
 
 import logging
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import make_asgi_app
 from backend.routers import predict, health, feedback
