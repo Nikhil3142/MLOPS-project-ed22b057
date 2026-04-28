@@ -23,7 +23,6 @@ Airflow (8081) → DVC Pipeline → MLflow Tracking
 - Python 3.10+
 - Git + DVC (`pip install dvc`)
 
-
 ---
 
 ## Setup & Running
@@ -60,7 +59,21 @@ docker-compose up -d
 
 Wait 30 seconds for all services to be ready.
 
-### Step 5 — Trigger the Airflow ingestion pipeline
+### Step 5 — Split the dataset (one-time only)
+
+Run this script once to split the original dataset into initial data (80%) and holdout data (20%):
+
+```bash
+python split_data.py
+```
+
+This creates:
+- `data/raw/initial_data.csv` — 1070 rows used for training
+- `data/raw/holdout_data.csv` — 268 rows locked away to simulate future data
+
+> **Note:** Only run this once. Running it again will re-split the data with a different random seed and invalidate existing DVC tracked files.
+
+### Step 6 — Trigger the Airflow ingestion pipeline
 
 Open `http://localhost:8081` → login: `admin / admin`
 
@@ -68,7 +81,7 @@ Find `ingestion_dag` → click the play button to trigger it.
 
 Wait for all 4 tasks to turn green (validate → clean → feature_engineer → compute_baselines).
 
-### Step 6 — Run the DVC ML pipeline
+### Step 7 — Run the DVC ML pipeline
 
 ```bash
 dvc repro -f
@@ -83,13 +96,13 @@ To train a different model, change `active_model` in `params.yaml` and run `dvc 
 active_model: xgboost   # options: linear_regression | ridge | lasso | random_forest | xgboost
 ```
 
-### Step 7 — Promote the best model in MLflow UI
+### Step 8 — Promote the best model in MLflow UI
 
 Open `http://localhost:5000`
 
 Compare all model runs by RMSE. Click on the best run → go to the model version → set alias to `production`.
 
-### Step 8 — Reload the model in the backend
+### Step 9 — Reload the model in the backend
 
 ```bash
 curl -X POST http://localhost:8001/reload
@@ -97,7 +110,19 @@ curl -X POST http://localhost:8001/reload
 
 Or use the "Reload Production Model" button on the Pipeline page.
 
-### Step 9 — Open the frontend
+### Step 10 — Import the Grafana Dashboard
+
+1. Open `http://localhost:3001` → login: `admin / admin`
+2. Go to **Connections → Data Sources → Add new data source → Prometheus**
+3. Set URL to `http://prometheus:9090` → click **Save & Test**
+4. Go to **Dashboards → Import**
+5. Upload `monitoring/grafana_dashboard.json`
+6. When prompted for the datasource, select the Prometheus datasource you just added
+7. Click **Import**
+
+The dashboard will show live metrics once predictions are made via `/predict`.
+
+### Step 11 — Open the frontend
 
 ```
 http://localhost:3000
@@ -110,7 +135,6 @@ http://localhost:3000
 To train and compare all 5 models:
 
 ```bash
-# Train each model
 for model in linear_regression ridge lasso random_forest xgboost; do
   sed -i "s/active_model: .*/active_model: $model/" params.yaml
   dvc repro -f
@@ -164,8 +188,8 @@ pytest tests/ --html=reports/test_report.html --self-contained-html -v
 ├── data/                 Raw and processed data (DVC tracked)
 ├── docs/                 Architecture, HLD, LLD, test plan, user manual
 ├── frontend/             React + Vite application
-├── mlartifacts/          MLflow artifact store (DVC tracked)
-├── models/               Model artifacts (DVC tracked)
+├── mlartifacts/          MLflow artifact store
+├── models/               Model artifacts
 ├── monitoring/           Prometheus config + Grafana dashboard
 ├── pipeline/
 │   ├── airflow/dags/     Airflow DAG definitions
